@@ -1,0 +1,60 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "integration-manager-worker.fullname" . }}
+  {{- if .Values.namespaced }}
+  namespace: {{ template "integration-manager-worker.namespace" . }}
+  {{- end }}
+  labels:
+    app: integration-manager-worker
+    chart: {{ template "integration-manager-worker.chart" . }}
+    release: {{ .Release.Name | quote }}
+    destinationId: {{ quote .Values.destinationId }}
+data:
+  worker.properties: |
+    #worker specific properties
+    server.port=5000
+
+    job.results.queue-name={{ .Values.resultsQueue }}
+
+    #AMQP Properties
+    queue.host={{ .Values.amqp.host }}
+    queue.port={{ .Values.amqp.port }}
+    queue.username=${rabbitmq-username}
+    queue.password=${rabbitmq-password}
+    queue.ssl.enabled={{ .Values.amqp.ssl }}
+
+    sharedDataPath=/opt/Actian
+
+    # Worker configuration
+    worker.concurrency={{ .Values.concurrency }}
+    worker.destinationId={{ .Values.destinationId }}
+    worker.engineJavaHome=${sharedDataPath}/engine/jre
+    worker.libraryPath=/opt/Actian/lib
+    worker.workerLocalDir=${sharedDataPath}/local/work
+    worker.api.port=5000
+
+    # Engine Configuration (for this Worker)
+    engine.iniFilePath=${sharedDataPath}/conf/cosmos.ini
+    engine.localEngineInstallPath=${sharedDataPath}/engine/runtime/di9
+    engine.localEngineListenerPort=4999
+    engine.localEngineRemoteJvmArgs=-Xms64m -Xmx1g -XX:PermSize=64m -XX:MaxPermSize=256m -Dsun.client.defaultConnectTimeout=60000 -Dsun.client.defaultReadTimeout=180000
+    engine.allowAllExecutables=false
+    #engine.executableWhiteList=
+
+    {{- if .Values.extraConfig }}
+    {{ .Values.extraConfig | indent 4 | trim }}
+    {{- end }}
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  {{- if .Values.namespaced }}
+  namespace: {{ template "integration-manager-worker.namespace" . }}
+  {{- end}}
+  name: {{ template "integration-manager-worker.fullname" . }}-license
+data:
+  dc11.slc: |
+    {{ .Values.license | toString | indent 4 | trim | required "License is required" }}

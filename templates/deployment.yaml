@@ -1,0 +1,103 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "integration-manager-worker.fullname" . }}
+  {{- if .Values.namespaced }}
+  namespace: {{ template "integration-manager-worker.namespace" . }}
+  {{- end }}
+  labels:
+    app: integration-manager-worker
+    chart: {{ template "integration-manager-worker.chart" . }}
+    release: {{ .Release.Name | quote }}
+    destinationId: {{ quote .Values.destinationId }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      app: integration-manager-worker
+      release: {{ .Release.Name | quote }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- if .Values.podAnnotations }}
+        {{ .Values.podAnnotations | toYaml | indent 8 | trim }}
+        {{- end }}
+      labels:
+        app: integration-manager-worker
+        chart: {{ template "integration-manager-worker.chart" . }}
+        release: {{ .Release.Name | quote }}
+        destinationId: {{ quote .Values.destinationId }}
+        {{- if .Values.extraLabels }}
+        {{ .Values.extraLabels | toYaml | indent 8 | trim }}
+        {{- end }}
+    spec:
+      {{- if .Values.affinity }}
+      affinity:
+        {{ .Values.affinity | toYaml | indent 8 | trim }}
+      {{- end }}
+      serviceAccountName: {{ template "integration-manager-worker.fullname" . }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+        {{ .Values.nodeSelector | toYaml | indent 8 | trim }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      containers:
+      - name: worker
+        image: {{ .Values.image }}
+        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        env:
+        - name: WORKER_CONFIGMAP_NAME
+          value: {{ template "integration-manager-worker.fullname" . }}
+        ports:
+        - containerPort: 5000
+        lifecycle:
+          preStop:
+            exec:
+              # Stop worker from picking up more jobs and send SIGKILL once /worker/poke is no longer available (All jobs have completed)
+              # Added sleep 30 at start to allow enough time for container to start up
+              command: ["/bin/sh", "-c", "sleep 30 && curl -X 'DELETE' http://localhost:5000/worker/shutdown && until [[ $(curl -I --silent -o /dev/null -w %{http_code} http://localhost:5000/worker/poke) != 200  ]] ;do printf '.'; sleep 5; done;"]
+        volumeMounts:
+        - name: secret-volume
+          readOnly: true
+          mountPath: /etc/secrets
+        - name: license-vol
+          readOnly: true
+          mountPath: /opt/Actian/volume
+        {{- if .Values.extraVolumeMounts }}
+        {{ .Values.extraVolumeMounts | toYaml | indent 8 | trim }}
+        {{- end }}
+        livenessProbe:
+          {{ .Values.livenessProbe | toYaml | indent 10 | trim }}
+        {{- if .Values.resources }}
+        resources:
+          {{ .Values.resources | toYaml | indent 10 | trim }}
+        {{- end }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.imagePullSecrets }}
+        - name: {{ . }}
+      {{- end }}
+      {{- end }}
+      volumes:
+      - name: secret-volume
+        secret:
+          {{- if .Values.existingRabbitSecret }}
+          secretName: {{ .Values.existingRabbitSecret }}
+          {{- else }}
+          secretName: {{ template "integration-manager-worker.fullname" . }}
+          {{- end }}
+          items:
+          - key: rabbitmq-username
+            path: rabbitmq-username
+          - key: rabbitmq-password
+            path: rabbitmq-password
+      - name: license-vol
+        configMap:
+          name: {{ template "integration-manager-worker.fullname" . }}-license
+      {{- if .Values.extraVolumes }}
+      {{ .Values.extraVolumes | toYaml | indent 6 | trim }}
+      {{- end }}

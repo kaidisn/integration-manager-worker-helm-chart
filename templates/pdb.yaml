@@ -1,0 +1,21 @@
+{{- if .Values.pdb }}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "integration-manager-worker.fullname" . }}
+  {{- if .Values.namespaced }}
+  namespace: {{ template "integration-manager-worker.namespace" . }}
+  {{- end }}
+  labels:
+    app: integration-manager-worker
+    chart: {{ template "integration-manager-worker.chart" . }}
+    release: {{ .Release.Name | quote }}
+    destinationId: {{ quote .Values.destinationId }}
+spec:
+  selector:
+    matchLabels:
+      app: integration-manager-worker
+      destinationId: {{ quote .Values.destinationId }}
+      release: {{ .Release.Name | quote }}
+{{ toYaml .Values.pdb | indent 2 }}
+{{- end }}

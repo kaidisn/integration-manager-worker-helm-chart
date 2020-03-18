@@ -1,0 +1,6 @@
+apiVersion: v1
+appVersion: "1.0"
+description: A Helm chart to install an Integration Manager Worker pool on Kubernetes
+  for the specified destination
+name: integration-manager-worker
+version: 1.0.22

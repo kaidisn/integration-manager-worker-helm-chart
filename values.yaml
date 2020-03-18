@@ -1,0 +1,75 @@
+# Since our images are in a private repository, a docker registry secret will need to be created in advance to access our repo
+# This secret must be available in the same namespace where the helm chart will be installed to.
+# kubectl create secret docker-registry actian-registrykey --docker-server=<your-registry-server> --docker-username=<your-name> --docker-password=<your-pword> --docker-email=<your-email>
+# Populate imagePullSecrets as follows once set up:
+#imagePullSecrets:
+#  - actian-registrykey
+imagePullSecrets: []
+image: actian/datacloud-worker:latest
+imagePullPolicy: IfNotPresent
+namespaced:
+revisionHistoryLimit: 10
+resultsQueue: JOB_RESULTS
+affinity: {}
+#   affinity:
+#     podAntiAffinity:
+#       preferredDuringSchedulingIgnoredDuringExecution:
+#       - weight: 1
+#         podAffinityTerm:
+#           labelSelector:
+#             matchLabels:
+#               app: integration-manager-worker
+#           topologyKey: kubernetes.io/hostname
+livenessProbe:
+  initialDelaySeconds: 120
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 3
+  httpGet:
+    scheme: HTTP
+    path: /worker/health
+    port: 5000
+existingRabbitSecret:
+# Must have the keys:
+#   rabbitmq-username
+#   rabbitmq-password
+replicaCount: 1
+pdb: {}
+  #minReplicas: 1
+extraConfig: {}
+extraLabels: {}
+podAnnotations: {}
+resources: {}
+nodeSelector: {}
+# Extra volumes for deployment
+extraVolumes: []
+# Extra volume mounts for deployment
+extraVolumeMounts: []
+concurrency: 1
+# Amount of time to wait for current jobs to finish before forceful shutdown
+terminationGracePeriodSeconds: 172800
+destinationId:
+
+# AMQP Configuration - Must use AMQP version 0-9-1
+amqp:
+  # Set host to rabbitmq-rabbitmq-ha.default.svc.cluster.local if using helm rabbitmq-ha
+  host:
+  # Set port to 15672 if using helm rabbitmq-ha
+  port: 5672
+  # Set if not using existingRabbitSecret
+  username:
+  password:
+  ssl: false
+
+# License file contents
+license:
+# Example License Config
+#license: |
+#  <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+#
+#  <!-- Do not modify this file.  It is digitally signed. -->
+#  <!--License Signer Version: v11-->
+#  <License>
+#    ...
+#  </License>
