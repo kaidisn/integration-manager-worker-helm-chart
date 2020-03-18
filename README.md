@@ -7,7 +7,7 @@ This chart installs a DataConnect Worker pool for Integration Manager for a spec
 Add the following repository to helm:  
 ```helm repo add actian-datacloud https://s3.amazonaws.com/actian-datacloud-helm-charts```
 
-To install the chart, first configure a values.yaml file specific for your environment:  
+To install the chart, first configure an override-values.yaml file specific for your environment:  
 ```helm install actian-datacloud/integration-manager-worker -f override-values.yaml```
 
 ## Configuration
