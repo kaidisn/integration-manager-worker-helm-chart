@@ -16,29 +16,26 @@ The following table lists the configurable parameters of the integration-manager
   
 | Paramter | Description | Default|
 | -----  | ----- | ------|
-| `imagePullSecret` | secret name of holding the docker creds | [] |
-| `image` | image to pull | actian/worker-kubernetes:latest |
-| `imagePullPolicy` | When to pull image | Always |
+| `imagePullSecrets` | name of Secret resource containing private registry credentials | [] |
+| `image` | image to pull | actian/datacloud-worker:latest |
+| `imagePullPolicy` | When to pull image | IfNotPresent |
 | `namespaced` | true / false : whether you want worker to run in its own namespace. If namespaced, namespace = \"\[destinationId\]-\[ReleaseName\]\" | false |
-| `existingRabbitSecret` | Name of RabbitMQ secret that already exists | "" |
+| `existingRabbitSecret` | name of RabbitMQ secret that already exists | "" |
 | `replicaCount` | number of pods to run | 1
 | `extraConfig` | additional properties to include in the config map | {} |
 | `extraLabels` | additional labels to add | {} |
 | `podAnnotations` | pod annotations | {} |
 | `resources` | set resource limits | {} |
-| `nodeSelector` | set nodeSelctor | {} |
+| `nodeSelector` | set nodeSelector | {} |
 | `extraVolumes` | extra volume for deployment | [] |
 | `extraVolumeMounts` | extra volume mounts for deployment | [] |
 | `concurrency` | number of jobs worker can run in parallel | 1 |
 | `terminationGracePeriodSeconds` | Amount of time to wait for current jobs to finish before forceful shutdown | 172800 |
 | `destinationId` | ID of the destination worker is attaching to | "" |
-| `fileStorageEndpoint` | cloud file storage endpoint | "" |
-| `fileStorageType` | type of cloud file storage | "" |
-| `workerType` | type of worker [CLOUD, REMOTE] | CLOUD |
 | `pdb` | pod disruption budget | {} |
 | `license` | contents of dc11.slc file | "" |
 | `amqp.host` | host name of amqp server | |
 | `amqp.port` | port of the amqp server | 5672 |
 | `amqp.username` | username for amqp authentication | "" | 
-| `amqp.password` | password for amqp authenication | ""|
+| `amqp.password` | password for amqp authentication | ""|
 | `amqp.ssl` | use ssl | false |
