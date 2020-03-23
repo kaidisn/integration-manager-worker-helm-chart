@@ -3,4 +3,4 @@ appVersion: 2.0.5
 description: A Helm chart to install an Integration Manager Worker pool on Kubernetes
   for the specified destination
 name: integration-manager-worker
-version: 1.2.0
+version: 1.2.1
