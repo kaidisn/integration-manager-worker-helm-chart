@@ -17,7 +17,7 @@ The following table lists the configurable parameters of the integration-manager
 | Paramter | Description | Default|
 | -----  | ----- | ------|
 | `imagePullSecrets` | name of Secret resource containing private registry credentials | [] |
-| `image` | image to pull | actian/datacloud-worker:latest |
+| `image` | image to pull | actian/datacloud-worker:2.0.5.270 |
 | `imagePullPolicy` | When to pull image | IfNotPresent |
 | `namespaced` | true / false : whether you want worker to run in its own namespace. If namespaced, namespace = \"\[destinationId\]-\[ReleaseName\]\" | false |
 | `existingRabbitSecret` | name of RabbitMQ secret that already exists | "" |
