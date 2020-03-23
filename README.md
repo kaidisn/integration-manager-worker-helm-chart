@@ -14,7 +14,7 @@ To install the chart, first configure an override-values.yaml file specific for 
 
 The following table lists the configurable parameters of the integration-manager-worker chart and their default values.
   
-| Paramter | Description | Default|
+| Parameter | Description | Default|
 | -----  | ----- | ------|
 | `imagePullSecrets` | name of Secret resource containing private registry credentials | [] |
 | `image` | image to pull | actian/datacloud-worker:2.0.5.270 |
