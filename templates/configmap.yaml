@@ -34,6 +34,17 @@ data:
     worker.libraryPath=/opt/Actian/lib
     worker.workerLocalDir=${sharedDataPath}/local/work
     worker.api.port=5000
+    
+    # Dataflow Configuration
+    dataflow.enabled=true
+    dataflow.licensePath=${sharedDataPath}/dataflow/df6.slc
+    dataflow.localEngineInstallPath=${sharedDataPath}/dataflow/bin
+    dataflow.localEngineListenerPort=4998
+    dataflow.localEngineRemoteJvmArgs=-Xms64m -Xmx1g -XX:PermSize=64m -XX:MaxPermSize=256m -Dsun.client.defaultConnectTimeout=60000 -Dsun.client.defaultReadTimeout=180000
+    dataflow.allowAllExecutables=true
+    dataflow.executableWhiteList=
+    dataflow.charset=utf-8
+    dataflow.strictMode=disabled
 
     # Engine Configuration (for this Worker)
     engine.iniFilePath=${sharedDataPath}/conf/cosmos.ini
@@ -53,8 +64,14 @@ kind: ConfigMap
 metadata:
   {{- if .Values.namespaced }}
   namespace: {{ template "integration-manager-worker.namespace" . }}
-  {{- end}}
+  {{- end }}
   name: {{ template "integration-manager-worker.fullname" . }}-license
 data:
+{{- if .Values.license }}  
   dc11.slc: |
-    {{ .Values.license | toString | indent 4 | trim | required "License is required" }}
+    {{ .Values.license | toString | indent 4 | trim }}
+{{- end }}
+{{- if .Values.dflicense }}    
+  df6.slc: |
+    {{ .Values.dflicense | toString | indent 4 | trim }}
+{{- end }}   
