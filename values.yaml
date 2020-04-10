@@ -63,6 +63,7 @@ amqp:
   ssl: false
 
 # License file contents
+dflicense:
 license:
 # Example License Config
 #license: |
