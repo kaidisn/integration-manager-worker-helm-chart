@@ -98,7 +98,6 @@ spec:
       - name: license-vol
         configMap:
           name: {{ template "integration-manager-worker.fullname" . }}-license
-          name: {{ template "integration-manager-worker.fullname" . }}-dflicense
       {{- if .Values.extraVolumes }}
       {{ .Values.extraVolumes | toYaml | indent 6 | trim }}
       {{- end }}

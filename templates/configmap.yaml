@@ -64,19 +64,14 @@ kind: ConfigMap
 metadata:
   {{- if .Values.namespaced }}
   namespace: {{ template "integration-manager-worker.namespace" . }}
-  {{- end}}
+  {{- end }}
   name: {{ template "integration-manager-worker.fullname" . }}-license
 data:
+{{- if .Values.license }}  
   dc11.slc: |
-    {{ .Values.license | toString | indent 4 | trim | required "License is required" }}
----    
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  {{- if .Values.namespaced }}
-  namespace: {{ template "integration-manager-worker.namespace" . }}
-  {{- end}}
-  name: {{ template "integration-manager-worker.fullname" . }}-dflicense
-data:
+    {{ .Values.license | toString | indent 4 | trim }}
+{{- end }}
+{{- if .Values.dflicense }}    
   df6.slc: |
-    {{ .Values.dflicense | toString | indent 4 | trim | required "dataflow License is required" }}    
+    {{ .Values.dflicense | toString | indent 4 | trim }}
+{{- end }}   
