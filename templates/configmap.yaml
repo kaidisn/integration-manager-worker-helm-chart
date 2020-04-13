@@ -37,7 +37,7 @@ data:
     
     # Dataflow Configuration
     dataflow.enabled=true
-    dataflow.licensePath=${sharedDataPath}/dataflow/df6.slc
+    dataflow.licensePath=${sharedDataPath}/volume/df6.slc
     dataflow.localEngineInstallPath=${sharedDataPath}/dataflow/bin
     dataflow.localEngineListenerPort=4998
     dataflow.localEngineRemoteJvmArgs=-Xms64m -Xmx1g -XX:PermSize=64m -XX:MaxPermSize=256m -Dsun.client.defaultConnectTimeout=60000 -Dsun.client.defaultReadTimeout=180000
