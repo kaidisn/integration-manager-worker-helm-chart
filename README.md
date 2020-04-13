@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This chart installs a DataConnect Worker pool for Integration Manager for a specific destination
+This chart installs a DataConnect and DataFlow Worker pool for Integration Manager for a specific destination
 
 Add the following repository to helm:  
 ```helm repo add actian-datacloud https://s3.amazonaws.com/actian-datacloud-helm-charts```
@@ -38,4 +38,5 @@ The following table lists the configurable parameters of the integration-manager
 | `amqp.username` | username for amqp authentication | nil | 
 | `amqp.password` | password for amqp authentication | nil |
 | `amqp.ssl` | use ssl | false |
-| `license` | contents of dc11.slc file | nil |
+| `license` | contents of dc11.slc file | 
+| `dflicense` | contents of df6.slc file | 
