@@ -38,5 +38,5 @@ The following table lists the configurable parameters of the integration-manager
 | `amqp.username` | username for amqp authentication | nil | 
 | `amqp.password` | password for amqp authentication | nil |
 | `amqp.ssl` | use ssl | false |
-| `license` | contents of dc11.slc file | 
-| `dflicense` | contents of df6.slc file | 
+| `license` | contents of dc11.slc file | nil |
+| `dflicense` | contents of df6.slc file | nil |
