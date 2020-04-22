@@ -26,6 +26,7 @@ data:
     queue.ssl.enabled={{ .Values.amqp.ssl }}
 
     sharedDataPath=/opt/Actian
+    installPath=/opt/Actian
 
     # Worker configuration
     worker.concurrency={{ .Values.concurrency }}
