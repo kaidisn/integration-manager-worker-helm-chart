@@ -6,7 +6,7 @@
 #  - actian-registrykey
 imagePullSecrets: []
 image: actian/datacloud-worker:2.0.5.270
-imagePullPolicy: IfNotPresent
+imagePullPolicy: Always
 namespaced:
 revisionHistoryLimit: 10
 resultsQueue: JOB_RESULTS
