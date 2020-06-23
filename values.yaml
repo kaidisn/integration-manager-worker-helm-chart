@@ -74,3 +74,10 @@ license:
 #  <License>
 #    ...
 #  </License>
+externalSecrets:
+  enabled: false
+  backendType:
+  keyVaultName:
+  keyName:
+  keyProperty:
+dockerJsonConfiguration:
