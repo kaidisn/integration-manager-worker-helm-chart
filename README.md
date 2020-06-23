@@ -40,7 +40,7 @@ The following table lists the configurable parameters of the integration-manager
 | `amqp.ssl` | use ssl | false |
 | `license` | contents of dc11.slc file | nil |
 | `dflicense` | contents of df6.slc file | nil |
-| `externalSecrets.enabled` | contents of df6.slc file | false |
+| `externalSecrets.enabled` | External Secrets Helm chart is deployed and configured | false |
 | `externalSecrets.backendType` | secretsManager, azureKeyVault | nil |
 | `externalSecrets.keyVaultName` | required if backendType is azureKeyVault  | nil |
 | `externalSecrets.keyName` | name of the secret  | nil |

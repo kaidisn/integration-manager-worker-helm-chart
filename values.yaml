@@ -80,4 +80,4 @@ externalSecrets:
   keyVaultName:
   keyName:
   keyProperty:
-dockerJsonConfiguration:
+dockerConfiguration:
