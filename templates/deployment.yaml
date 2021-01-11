@@ -61,6 +61,9 @@ spec:
               # Added sleep 30 at start to allow enough time for container to start up
               command: ["/bin/sh", "-c", "sleep 30 && curl -X 'DELETE' http://localhost:5000/worker/shutdown && until [[ $(curl -I --silent -o /dev/null -w %{http_code} http://localhost:5000/worker/poke) != 200  ]] ;do printf '.'; sleep 5; done;"]
         volumeMounts:
+        - name: worker-config
+          readOnly: true
+          mountPath: /etc/config
         - name: secret-volume
           readOnly: true
           mountPath: /etc/secrets
@@ -83,6 +86,9 @@ spec:
       {{- end }}
       {{- end }}
       volumes:
+      - name: worker-config
+        configMap:
+          name: {{ template "integration-manager-worker.fullname" . }}
       - name: secret-volume
         secret:
           {{- if .Values.existingRabbitSecret }}
