@@ -59,7 +59,7 @@ spec:
             exec:
               # Stop worker from picking up more jobs and send SIGKILL once /worker/poke is no longer available (All jobs have completed)
               # Added sleep 30 at start to allow enough time for container to start up
-              command: ["/bin/sh", "-c", "sleep 5 && if [ $(curl -X 'DELETE' -I --silent -o /dev/null -w %{http_code} http://localhost:5000/worker/shutdown) == 202 ] ; then until [[ $(curl -I --silent -o /dev/null -w %{http_code} http://localhost:5000/worker/poke) != 200  ]] ;do printf '.'; sleep 5; done; else kill -11 1; fi;"]
+              command: ["/bin/sh", "-c", "sleep 30 && if [ $(curl -X 'DELETE' -I --silent -o /dev/null -w %{http_code} http://localhost:5000/worker/shutdown) == 202 ] ; then until [[ $(curl -I --silent -o /dev/null -w %{http_code} http://localhost:5000/worker/poke) != 200  ]] ;do printf '.'; sleep 5; done; else kill -11 1; fi;"]
         volumeMounts:
         - name: worker-config
           readOnly: true
