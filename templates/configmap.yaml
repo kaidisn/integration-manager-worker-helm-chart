@@ -76,7 +76,7 @@ data:
   df6.slc: |
     {{ .Values.dflicense | toString | indent 4 | trim }}
 {{- end }}   
-{{- if .Values.dflicense }}    
+{{- if .Values.googleApplicationCredentials }}    
   aflGAC.key: |
     {{ .Values.googleApplicationCredentials | toString | indent 4 | trim }}
 {{- end }}   
