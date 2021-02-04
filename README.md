@@ -21,6 +21,7 @@ The following table lists the configurable parameters of the integration-manager
 | `imagePullPolicy` | When to pull image | IfNotPresent |
 | `namespaced` | true / false : whether you want worker to run in its own namespace. If namespaced, namespace = \"\[destinationId\]-\[ReleaseName\]\" | false |
 | `existingRabbitSecret` | name of RabbitMQ secret that already exists | nil |
+| `existingGcpSecret` | name of Google Cloud secret that already exists | nil |
 | `replicaCount` | number of pods to run | 1 |
 | `extraConfig` | additional properties to include in the config map | {} |
 | `extraLabels` | additional labels to add | {} |
