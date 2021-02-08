@@ -52,6 +52,8 @@ spec:
         env:
         - name: WORKER_CONFIGMAP_NAME
           value: {{ template "integration-manager-worker.fullname" . }}
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/secrets/gcp/gcp-secret
         ports:
         - containerPort: 5000
         lifecycle:
@@ -70,6 +72,10 @@ spec:
         - name: license-vol
           readOnly: true
           mountPath: /opt/Actian/volume
+        - name: gcp-secrets
+          readOnly: true
+          mountPath: /etc/secrets/gcp  
+
         {{- if .Values.extraVolumeMounts }}
         {{ .Values.extraVolumeMounts | toYaml | indent 8 | trim }}
         {{- end }}
@@ -86,6 +92,16 @@ spec:
       {{- end }}
       {{- end }}
       volumes:
+      - name: gcp-secrets
+        secret:
+          {{- if .Values.existingGcpSecret }}
+          secretName: {{ .Values.existingGcpSecret }}
+          {{- else }}
+          secretName: {{ template "integration-manager-worker.fullname" . }}-gcp
+          {{- end }}
+          items:
+          - key: gcp-secret
+            path: gcp-secret
       - name: worker-config
         configMap:
           name: {{ template "integration-manager-worker.fullname" . }}
